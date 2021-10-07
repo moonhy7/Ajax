@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="css/jquery-ui.css">
+<script src="js/jquery-3.6.0.min.js"></script>
+<script src="js/jquery-ui.js"></script>
+<title>Ajax 사용 - GET방식</title>
+<style>
+	body {
+		font-size : 75%;
+	}
+	
+	input.text {
+		margin-bottom : 12px;
+		width : 95%;
+		padding : .4em;
+	}
+</style>
+</head>
+<body>
+	<!-- 다이얼로그(모달) 창에 표현할 구성 요소들 -->
+	<div id="dialog-new" title="새 연락처 추가하기">
+		<form>
+			<label for="name">이름</label>
+			<input type="text" id="name" name="name" 
+					class="text ui-widget-content ui-cornet-all">
+			<label for="tel">전화번호</label>
+			<input type="text" id="tel" name="tel" 
+					class="text ui-widget-content ui-cornet-all">
+			<label for="address">주소</label>
+			<input type="text" id="address" name="address" 
+					class="text ui-widget-content ui-cornet-all">
+		</form>
+	</div>
+	<button type="button" id="addBtn">추가</button>
+	<script>
+		$(document).ready(function() {
+			//다이얼로그(모달) 창 영역 숨김 처리
+			$("#dialog-new").dialog({
+				autoOpen : false,
+				modal : true
+			});
+			
+			$("#addBtn").click(function() {
+				//다이얼로그(모달) 창 구성 부분
+				$("#dialog-new").dialog({
+					//설정 값 지정 영역
+					modal : true, 
+					buttons : { //원하는 버튼 추가 가능
+						"저장" : function() {
+							$(this).dialog("close"); //다이얼로그가 꺼지면서
+							alert("저장 완료"); // 알림창뜨게함
+						},
+						"취소" : function() {
+							$(this).dialog("close");
+						}
+					}
+				});
+				//다이얼로그(모달) 창 오픈 메소드
+				$("#dialog-new").dialog("open");
+			});
+		});
+	</script>
+</body>
+</html>

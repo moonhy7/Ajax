@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="lib/jpaginate/style.css">
+<link rel="stylesheet" href="lib/waitme/waitMe.css">
+<link rel="stylesheet" href="css/jquery-ui.css">
+<script src="js/jquery-3.6.0.min.js"></script>
+<script src="js/jsrender.js"></script>
+<script src="js/jquery-ui.js"></script>
+<script src="lib/waitme/waitMe.js"></script>
+<script src="lib/jpaginate/jQuery.paginate.js"></script>
+<title>주소록 어플리케이션</title>
+<style>
+	body {
+		font-size : 75%;
+	}
+	
+	input.text {
+		margin-bottom : 12px;
+		width : 95%;
+		padding : .4em;
+	}
+</style>
+</head>
+<body>
+	<h2 class="ui-widget ui-header">주소록 리스트</h2>
+	<!-- 
+		주소록 추가 버튼
+		버튼 클릭 시 모달 창으로 입력 폼 열림
+	 -->
+	<button role="button" id="btnNewContact"
+			class="add ui-button ui-state-default ui-button-txt-only">
+			<span class="ui-button-text">새로운 연락처 추가</span>		
+	</button>
+	
+	<!-- 주소록 출력 영역 -->
+	<div id="output" style="text-align:center;width:630px;">
+		<table id="contact_table" style="border:solid 1px black;">
+			<thead>
+				<tr style="background-color:#cb842e;color:width;">
+					<th style="width:60px">번호</th>
+					<th style="width:90px">이름</th>
+					<th style="width:100px">전화번호</th>
+					<th style="width:250px">주소</th>
+					<th style="width:130px">기능</th>
+				</tr>
+			</thead>
+			
+			<!-- 
+				주소 목록 출력 부분
+				jsRender를 이용해서 viewtemlate과 데이터가 결합된 형태로 출력
+			 -->
+			 <tbody id="contactlist">
+			 </tbody>
+		</table>
+		
+		<!-- 페이지 이동 버튼 출력 부분(paginate 이용) -->
+		<div id="paging">
+		</div>
+	</div>
+	<Script>
+		$(document).ready(function() {
+			// 1. 공통 변수, 옵션
+			
+			// 2. 공통함수
+			
+			// 3. 이벤트 함수
+			
+			// 4. 화면 초기화 코드
+		});
+	</Script>
+</body>
+</html>

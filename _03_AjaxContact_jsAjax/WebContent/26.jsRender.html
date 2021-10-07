@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="js/jquery-3.6.0.min.js"></script>
+<script src="js/jsrender.js"></script>
+<title>Ajax 사용 - GET방식</title>
+<style>
+	table {
+		width : 400px;
+		border : 1px solid black;
+		border-collapse : collapse; 
+	}
+	
+	td, th {
+		border : 1px solid black;
+		text-align : center;
+	}
+	
+	table > thead > tr {
+		color : yellow;
+		background-color : purple;
+	}
+</style>
+</head>
+<body>
+	<table id="list">
+		<thead>
+			<tr>
+				<th>번호</th>
+				<th>이름</th>
+				<th>전화번호</th>
+				<th>주소</th>
+			</tr>
+		</thead>
+		
+		<!-- UI가 출력될 영역 -->
+		<tbody id="container">
+		</tbody>
+	</table>
+	
+	<!-- 1) 데이터 영역
+					- 서버로부터 JSON 데이터 가져오기
+					- 데이터와 viewTemlate을 결합하여 UI영역에 표출 
+	-->
+	<script>
+		$(document).ready(function() {
+			$.get("/contact/list.do", function(data) {
+				var obj = JSON.parse(data); //서버로부터 응답받은 데이터 -> JSON 객체로 변환
+				var tmpl = $.templates("#contact_template"); //veiwTemplate 영역 변수로 선언
+				var str = tmpl.render(obj.contacts); //데이터 + viewTemplate = html UI
+				/*
+				<tr>
+					<td>64</td>
+					<td>홍길동</td>
+					<td>010-1111-2222</td>
+					<td>율도국</td>
+				</tr>
+				<tr>
+					<td>63</td>
+					<td>임꺽정</td>
+					<td>010-1111-2222</td>
+					<td>장길산</td>
+				</tr>
+				..........
+				*/
+				console.log(str);
+				$("#container").html(str);
+			});
+		});
+	</script>
+	
+	<!-- 2) viewTemplate영역(데이터가 들어오면 표현될 UI 템플릿) -->
+	<script id="contact_template" type="text/x-jsrender">
+		<tr>
+			<td>{{:no}}</td>
+			<td>{{:name}}</td>
+			<td>{{:tel}}</td>
+			<td>{{:address}}</td>
+		</tr>
+	</script>
+</body>
+</html>
