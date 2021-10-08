@@ -31,14 +31,14 @@
 	 -->
 	<button role="button" id="btnNewContact"
 			class="add ui-button ui-state-default ui-button-text-only">
-			<span class="ui-button-text">새로운 연락처 추가</span>		
+			<span class="ui-button-text">새로운 연락처 추가</span>
 	</button>
 	
 	<!-- 주소록 출력 영역 -->
 	<div id="output" style="text-align:center;width:630px;">
 		<table id="contact_table" style="border:solid 1px black;">
 			<thead>
-				<tr style="background-color:#cb842e;color:width;">
+				<tr style="background-color:#cb842e;color:white;">
 					<th style="width:60px;">번호</th>
 					<th style="width:90px;">이름</th>
 					<th style="width:100px;">전화번호</th>
@@ -48,11 +48,11 @@
 			</thead>
 			
 			<!-- 
-				주소 목록 출력 부분
-				jsRender를 이용해서 viewtemplate과 데이터가 결합된 형태로 출력
-			 -->
-			 <tbody id="contactlist">
-			 </tbody>
+				주소 목록 출력 부분 
+				jsRender를 이용해서 viewtemplate과 데이터가 결합된 형태로 출력	
+			-->
+			<tbody id="contactlist">
+			</tbody>
 		</table>
 		
 		<!-- 페이지 이동 버튼 출력 부분(paginate 이용) -->
@@ -73,10 +73,10 @@
 			</form>
 		</div>
 	</div>
-	<Script>
+	<script>
 		$(document).ready(function() {
 			// 1. 공통 변수, 옵션
-			// 서버로 list.do ajax 호출 시 전달할 파라미터 변수
+			//서버로 list.do ajax 호출 시 전달할 파라미터 변수
 			var param = { pageno : 1, pagesize : 5 };
 			//페이징 처리 시 사용할 전체 페이지 변수 선언
 			var totalPage = 0;
@@ -178,6 +178,73 @@
 				$("#input_dialog").dialog("close");
 			}
 			
+			//수정 처리 전 표출할 해당 데이터 조회
+			var editContact = function(no) {
+				$.get("/contact/search.do", { no : no }, function(data) {
+					var data = JSON.parse(data);
+					
+					if(data.errorMessage) {
+						alert(data.errorMessage);
+					} else {
+						var dialog = $("#input_dialog");
+						//find() : 해당 요소를 찾아서 선택
+						//input 필드의 값 세팅
+						dialog.find("#no").val(data.no);
+						dialog.find("#name").val(data.name);
+						dialog.find("#tel").val(data.tel);
+						dialog.find("#address").val(data.address);
+						
+						//dialog 오픈
+						dialog.dialog({
+							autoOpen : true,
+							modal : true,
+							buttons : {
+								"수정" : updateContact,
+								"취소" : cancelInput
+							}
+						});
+					}
+				});
+			}
+			
+			//수정 처리
+			var updateContact = function() {
+				var param = $("#f_contact").serialize();
+				console.log(param);
+				//input에 disabled 속성은 serialize로 묶이지 않음 따로 추가
+				param += "&no=" + $("#no").val();
+				console.log(param);
+				
+				$.post("/contact/update.do", param, function(data) {
+					var data =JSON.parse(data);
+					
+					if(data.status == "ok") {
+						//정상 수정 됐을 때 현재 페이지 다시 조회
+						viewContactList();
+					} else {
+						alert("연락처 수정 실패 : " + data.message);
+					}
+					//다이얼로그(모달) 창 닫기
+					$("#input_dialog").dialog("close");
+				});
+			}
+			
+			//삭제 처리
+			var deleteContact = function(no) {
+				if(confirm("정말로 삭제하시겠습니까?") == true) {
+					$.post("/contact/delete.do", { no : no }, function(data) {
+						var data =JSON.parse(data);
+						
+						if(data.status == "ok") {
+							//정상 삭제 됐을 때 현재 페이지 다시 조회
+							viewContactList();
+						} else {
+							alert("연락처 삭제 실패 : " + data.message);
+						}
+					});
+				}
+			}
+			
 			// 3. 이벤트 함수
 			$(document).ajaxStart(function() {
 				//ajax 호출 시 로딩 표시
@@ -190,7 +257,7 @@
 			//추가 버튼 클릭 시 다이얼로그(모달) 창 오픈
 			$("#btnNewContact").click(function() {
 				//다이얼로그 초기화 메소드
-				initializeInputForm();	
+				initializeInputForm();
 				//다이얼로그 설정
 				$("#input_dialog").dialog({
 					modal : true,
@@ -203,11 +270,23 @@
 				$("#input_dialog").dialog("open");
 			});
 			
+			//수정 버튼 클릭 시 발생 이벤트
+			$("#contactlist").on("click", "button.update", function() {
+				var no = $(this).data("no");
+				editContact(no);
+			});
+			
+			//삭제 버튼 클릭 시 발생 이벤트
+			$("#contactlist").on("click", "button.delete", function() {
+				var no = $(this).data("no");
+				deleteContact(no);
+			});
+			
 			// 4. 화면 초기화 코드
 			//처음 접속 시 ajax 요청 및 데이터 표출
 			viewContactList();
 		});
-	</Script>
+	</script>
 	
 	<!-- viewtemplate 영역 -->
 	<script id="tmpl_contact" type="text/x-jsrender">
@@ -217,11 +296,11 @@
 			<td>{{:tel}}</td>
 			<td>{{:address}}</td>
 			<td>
-				<button data-no="{{:no}}" role="button"
+				<button data-no="{{:no}}" role="button" 
 						class="update ui-button ui-state-default ui-button-text-only">
 					<span class="ui-button-text">수정</span>
 				</button>
-				<button data-no="{{:no}}" role="button"
+				<button data-no="{{:no}}" role="button" 
 						class="delete ui-button ui-state-default ui-button-text-only">
 					<span class="ui-button-text">삭제</span>
 				</button>
