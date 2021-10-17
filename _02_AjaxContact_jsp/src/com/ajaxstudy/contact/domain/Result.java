@@ -3,7 +3,6 @@ package com.ajaxstudy.contact.domain;
 public class Result {
 	private String status;
 	private String message;
-	
 
 	// super()를 이용한 생성자
 	public Result() {
