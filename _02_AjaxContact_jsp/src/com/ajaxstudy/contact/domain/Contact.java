@@ -6,12 +6,14 @@ public class Contact { // value of
 	private String tel; // 傈拳锅龋 
 	private String address; // 林家
 	
+	
 	// 积己磊
 	public Contact() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
+	
 	// 积己磊
 	public Contact(long no, String name, String tel, String address) {
 		super();
@@ -46,6 +48,7 @@ public class Contact { // value of
 	public void setAddress(String address) {
 		this.address = address;
 	}
+	
 	
 	// toString()
 	@Override
