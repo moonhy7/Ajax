@@ -55,6 +55,4 @@ public class ContactList { // 여러 건의 데이터를 한 번에 처리할 수 있도록 만듬
 		return "ContactList [pageNo=" + pageNo + ", pageSize=" + pageSize + ", totalCount=" + totalCount + ", contacts="
 				+ contacts + "]";
 	}
-	
-	
 }
